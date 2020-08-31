@@ -20,12 +20,12 @@
       - Make sure you have AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET as environment variables to successfully execute the sample(Can leverage process.env).
 */
 
-const { BlobServiceClient } = require("@azure/storage-blob");
-const { DefaultAzureCredential } = require("@azure/identity");
-const { AbortController } = require("@azure/abort-controller");
+const { BlobServiceClient } = require('@azure/storage-blob');
+const { DefaultAzureCredential } = require('@azure/identity');
+const { AbortController } = require('@azure/abort-controller');
 
 // Load the .env file if it exists
-require("dotenv").config();
+require('dotenv').config();
 
 const ONE_MINUTE = 60 * 1000;
 
@@ -33,7 +33,7 @@ async function main() {
   const aborter = AbortController.timeout(30 * ONE_MINUTE);
 
   // Enter your storage account name
-  const account = process.env.ACCOUNT_NAME || "";
+  const account = process.env.ACCOUNT_NAME || '';
 
   // Azure AD Credential information is required to run this sample:
   if (
@@ -42,7 +42,7 @@ async function main() {
     !process.env.AZURE_CLIENT_SECRET
   ) {
     console.warn(
-      "Azure AD authentication information not provided, but it is required to run this sample. Exiting."
+      'Azure AD authentication information not provided, but it is required to run this sample. Exiting.'
     );
     return;
   }
@@ -73,18 +73,18 @@ async function main() {
   // console.log(`Created container ${containerName} successfully`, createContainerResponse.requestId);
 
   // List blobs
-  const containerName = "psp1";
+  const containerName = 'psp1';
   const containerClient = blobServiceClient.getContainerClient(containerName);
 
-  console.log("4:>>>      List blobs ...");
+  console.log('4:>>>      List blobs ...');
   i = 1;
   for await (const blob of containerClient.listBlobsFlat()) {
     console.log(`Blob ${i++}: ${blob.name}`);
   }
 
-  console.log("...");
-  console.log("...");
-  console.log("...");
+  console.log('...');
+  console.log('...');
+  console.log('...');
 
   // Get blob
   // const downloadBlockBlobResponse = await blobServiceClient
@@ -99,29 +99,31 @@ async function main() {
   // Get blob content from position 0 to the end
   // In Node.js, get downloaded data by accessing downloadBlockBlobResponse.readableStreamBody
   // In browsers, get downloaded data by accessing downloadBlockBlobResponse.blobBody
-  const blobName = "FL_insurance_sample.csv";
+  const blobName = 'FL_insurance_sample.csv';
   blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-  console.time("download-blob");
+  console.time('download-blob');
   const downloadResponse = await blockBlobClient.download(0, aborter);
-  const downloadedContent = await streamToString(downloadResponse.readableStreamBody);
+  const downloadedContent = await streamToString(
+    downloadResponse.readableStreamBody
+  );
   console.log(`Downloaded blob content: "${downloadedContent}"`);
-  console.timeEnd("download-blob");
+  console.timeEnd('download-blob');
 }
 
 async function streamToString(readableStream) {
   return new Promise((resolve, reject) => {
     const chunks = [];
-    readableStream.on("data", (data) => {
+    readableStream.on('data', (data) => {
       chunks.push(data.toString());
     });
-    readableStream.on("end", () => {
-      resolve(chunks.join(""));
+    readableStream.on('end', () => {
+      resolve(chunks.join(''));
     });
-    readableStream.on("error", reject);
+    readableStream.on('error', reject);
   });
 }
 
 main().catch((err) => {
-  console.error("Error running sample:", err.message);
+  console.error('Error running sample:', err.message);
 });
