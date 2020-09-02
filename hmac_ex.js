@@ -52,9 +52,11 @@ inputStream
       `\tsecret: ${my_uuidv1}\n\tcomputed container name: ${containerName} `
     );
 
-    if (secretPwd) {
+    if (!psp[8]) {
+      console.log('------1');
       csvData.push(`${row};${secretPwd};${containerName}`);
     } else {
+      console.log('------2');
       csvData.push(`${row}`);
     }
   })
