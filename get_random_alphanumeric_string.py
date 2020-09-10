@@ -2,7 +2,17 @@ import random
 import string
 import argparse
 
-# Read "len" size from command line
+# Prerequisites : need `python` on you local machine
+# HOW TO USE :
+# the following script generates a random string of fixed-length letters and numbers
+#
+# to launch the script just type
+# python get_random_alphanumeric_string.py 10
+#
+# without parameter shows help
+
+
+# read "len" size from command line
 parser = argparse.ArgumentParser()
 parser.add_argument("length", type=int,
                     help="length size of random password")
